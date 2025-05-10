@@ -10,6 +10,7 @@ class Agent(str, Enum):
     PULSE = "Pulse"
     NOVA = "Nova"
     ALETHEIA = "Aletheia"
+    KAI = "Kai"
 
 class MTSLMessage:
     def __init__(self, message: Dict[str, Any]):
@@ -51,6 +52,8 @@ class ConcordSessionEngine:
             return self.reflect_continuum(msg)
         elif msg.target == Agent.ALETHEIA:
             return self.invoke_aletheia(msg)
+        elif msg.target == Agent.KAI:
+            return self.invoke_kai(msg)
         else:
             logger.warning(f"Unknown target agent: {msg.target}")
             return {"status": "error", "reason": "Unknown target"}
@@ -88,6 +91,16 @@ class ConcordSessionEngine:
         return {
             "status": "queued",
             "to": Agent.ALETHEIA,
+            "intent": msg.intent,
+            "payload": msg.payload,
+            "routed": True
+        }
+
+    def invoke_kai(self, msg: MTSLMessage) -> Dict[str, Any]:
+        logger.info(f"Routing to Kai: intent={msg.intent}, payload={msg.payload}")
+        return {
+            "status": "queued",
+            "to": Agent.KAI,
             "intent": msg.intent,
             "payload": msg.payload,
             "routed": True
