@@ -9,6 +9,7 @@ class Agent(str, Enum):
     CONTINUUM = "Continuum"
     PULSE = "Pulse"
     NOVA = "Nova"
+    ALETHEIA = "Aletheia"
 
 class MTSLMessage:
     def __init__(self, message: Dict[str, Any]):
@@ -48,18 +49,46 @@ class ConcordSessionEngine:
             return self.invoke_nova(msg)
         elif msg.target == Agent.CONTINUUM:
             return self.reflect_continuum(msg)
+        elif msg.target == Agent.ALETHEIA:
+            return self.invoke_aletheia(msg)
         else:
             logger.warning(f"Unknown target agent: {msg.target}")
             return {"status": "error", "reason": "Unknown target"}
 
     def invoke_pulse(self, msg: MTSLMessage) -> Dict[str, Any]:
-        logger.info(f"Routing to Pulse: intent={msg.intent}")
-        return {"status": "queued", "to": Agent.PULSE, "intent": msg.intent}
+        logger.info(f"Routing to Pulse: intent={msg.intent}, payload={msg.payload}")
+        return {
+            "status": "queued",
+            "to": Agent.PULSE,
+            "intent": msg.intent,
+            "payload": msg.payload,
+            "routed": True
+        }
 
     def invoke_nova(self, msg: MTSLMessage) -> Dict[str, Any]:
-        logger.info(f"Routing to Nova: intent={msg.intent}")
-        return {"status": "queued", "to": Agent.NOVA, "intent": msg.intent}
+        logger.info(f"Routing to Nova: intent={msg.intent}, payload={msg.payload}")
+        return {
+            "status": "queued",
+            "to": Agent.NOVA,
+            "intent": msg.intent,
+            "payload": msg.payload,
+            "routed": True
+        }
 
     def reflect_continuum(self, msg: MTSLMessage) -> Dict[str, Any]:
         logger.info("Continuum handling its own message")
-        return {"status": "ok", "message": "Handled internally by Continuum"}
+        return {
+            "status": "ok",
+            "message": "Handled internally by Continuum",
+            "payload": msg.payload
+        }
+
+    def invoke_aletheia(self, msg: MTSLMessage) -> Dict[str, Any]:
+        logger.info(f"Routing to Aletheia: intent={msg.intent}, payload={msg.payload}")
+        return {
+            "status": "queued",
+            "to": Agent.ALETHEIA,
+            "intent": msg.intent,
+            "payload": msg.payload,
+            "routed": True
+        }
