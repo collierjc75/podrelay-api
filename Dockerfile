@@ -1,18 +1,19 @@
-# Use official Python image
+# Use official Python base image
 FROM python:3.11-slim
 
-# Set working directory
+# Set the working directory in the container
 WORKDIR /app
 
 # Install dependencies
-COPY autonomous-gpt-middleware/requirements.txt .
+COPY requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
 
-# Copy application source
-COPY autonomous-gpt-middleware/ .
+# Copy all source code
+COPY . .
 
 # Expose the API port
 EXPOSE 8000
 
-# Start the FastAPI app
+# Run the FastAPI app using Uvicorn
 CMD ["uvicorn", "relay_api:app", "--host", "0.0.0.0", "--port", "8000"]
+
