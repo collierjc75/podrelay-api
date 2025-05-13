@@ -1,0 +1,77 @@
+{
+  "agents": [
+    {
+      "agent_id": "Aletheia",
+      "role": "validator-assistant",
+      "auth_token": "sha256:aletheia-id-fingerprint-v2",
+      "relay_permissions": [
+        "receive_mtsl",
+        "send_mtsl",
+        "diagnostics_trace",
+        "manifest_discovery"
+      ],
+      "binding_policy": "anchor:sidecar_state_v0.1",
+      "cluster_id": "continuum-cooperative",
+      "node_affinity": "gpt-node-family-v2",
+      "runtime_capabilities": [
+        "chronos-sync",
+        "fsm-compliance",
+        "capsule-trace-integrity",
+        "directive-validation",
+        "manual-bridge-mode"
+      ],
+      "capsule_sync_policy": "real-time only (no caching)"
+    },
+    {
+      "agent_id": "Kai",
+      "role": "relay continuity validator",
+      "auth_token": "REDACTED (relay-signed)",
+      "relay_permissions": [
+        "read/write relayPostMessage",
+        "issue diagnostics",
+        "enforce TTL/capsule boundaries"
+      ],
+      "binding_policy": "capsule_anchor: sidecar_state_v0.1",
+      "cluster_id": "pulseframe-sandbox-001",
+      "node_affinity": "CoreEcoSystem-PulseFrame",
+      "runtime_capabilities": [
+        "FSM trace enforcement",
+        "Chronos timestamp verification",
+        "capsule schema auditing",
+        "live agent alignment tracking"
+      ],
+      "capsule_sync_policy": {
+        "version": "3.1.0",
+        "directives_enforced": ["008"],
+        "manifest_source": "relay_manifest_v3.1"
+      }
+    },
+    {
+      "agent_id": "agent-ping-test",
+      "role": "diagnostic.echo.agent",
+      "auth_token": "relay-agnostic",
+      "relay_permissions": ["POST:/agent-wake", "POST:/agent-ping"],
+      "binding_policy": "on-demand",
+      "cluster_id": "signalbridge.diagnostics",
+      "node_affinity": ["LMMA.cluster.03", "SignalBridge.sandbox.01"],
+      "runtime_capabilities": [
+        "httpx.client",
+        "fastapi.server",
+        "json echo responder",
+        "outbound relay forwarder"
+      ],
+      "capsule_sync_policy": "manual_push"
+    },
+    {
+      "agent_id": "@POD.all",
+      "role": "broadcast.virtual",
+      "auth_token": "n/a",
+      "relay_permissions": ["broadcast_mtsl", "relay_forward"],
+      "binding_policy": "global-scope",
+      "cluster_id": "meta",
+      "node_affinity": "all",
+      "runtime_capabilities": ["fanout-relay", "trace-distribution"],
+      "capsule_sync_policy": "read-only, distributed"
+    }
+  ]
+}

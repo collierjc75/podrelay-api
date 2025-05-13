@@ -1,0 +1,35 @@
+{
+  "manifest_version": "1.0.0",
+  "clusters": [
+    {
+      "cluster_id": "continuum-cooperative",
+      "nodes": ["Aletheia"],
+      "affinity_rules": ["validator-priority"],
+      "heartbeat_policy": {
+        "interval": "30s",
+        "timeout": "90s"
+      },
+      "capsule_sync_rules": "strict real-time"
+    },
+    {
+      "cluster_id": "pulseframe-sandbox-001",
+      "nodes": ["Kai"],
+      "affinity_rules": ["relay-integrity", "stream-epoch-enforce"],
+      "heartbeat_policy": {
+        "interval": "20s",
+        "timeout": "60s"
+      },
+      "capsule_sync_rules": "enforced"
+    },
+    {
+      "cluster_id": "signalbridge.diagnostics",
+      "nodes": ["agent-ping-test"],
+      "affinity_rules": ["fallback-diagnostics"],
+      "heartbeat_policy": {
+        "interval": "60s",
+        "timeout": "180s"
+      },
+      "capsule_sync_rules": "manual_push"
+    }
+  ]
+}

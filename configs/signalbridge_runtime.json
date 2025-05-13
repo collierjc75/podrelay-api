@@ -1,0 +1,20 @@
+{
+  "version": "2.1.0",
+  "route_table": {
+    "send_mtsl": ["Kai"],
+    "receive_mtsl": ["Aletheia"],
+    "diagnostics_trace": ["agent-ping-test"],
+    "broadcast_mtsl": ["@POD.all"]
+  },
+  "fallback_handlers": ["agent-ping-test"],
+  "capsule_trace_rules": {
+    "enforce_directive": true,
+    "max_ttl": "90s",
+    "anchor": "sidecar_state_v0.1"
+  },
+  "relay_constraints": {
+    "max_concurrent_relays": 10,
+    "bandwidth_limit": "2mbps",
+    "latency_tolerance_ms": 250
+  }
+}
