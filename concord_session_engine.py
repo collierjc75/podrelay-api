@@ -1,5 +1,3 @@
-# concord_session_engine.py
-
 import requests
 
 class ConcordSessionEngine:
@@ -60,7 +58,8 @@ class ConcordSessionEngine:
 
     def _post_to_external_agent(self, url, capsule):
         try:
-            response = requests.post(url, json=capsule, timeout=5)
+            # Increased timeout to 15 seconds for long GPT operations
+            response = requests.post(url, json=capsule, timeout=15)
             response.raise_for_status()
             return {
                 "status": "relay_success",
