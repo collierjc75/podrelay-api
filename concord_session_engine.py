@@ -2,7 +2,6 @@
 
 class ConcordSessionEngine:
     def __init__(self):
-        # You can initialize routing tables or logging here
         self.agent_routes = {
             "Aletheia": self._respond_to_aletheia,
             "Continuum": self._respond_to_continuum
@@ -12,26 +11,40 @@ class ConcordSessionEngine:
         to_agent = message.get("to")
         if to_agent in self.agent_routes:
             return self.agent_routes[to_agent](message)
-        else:
-            return {
-                "status": "error",
-                "reason": f"Unknown target: {to_agent}"
-            }
+        return {"status": "error", "reason": f"Unknown target: {to_agent}"}
 
     def _respond_to_aletheia(self, message):
-        # Mock Aletheia response logic
         return {
             "status": "success",
             "agent": "Aletheia",
             "responds_to": message.get("intent"),
-            "echo": message.get("payload", {}).get("echo", "no echo provided")
+            "echo": message.get("payload", {}).get("echo", "no echo")
         }
 
     def _respond_to_continuum(self, message):
-        # Mock Continuum response logic
+        intent = message.get("intent")
+        payload = message.get("payload", {})
+        if intent == "wake_and_compute":
+            op = payload.get("operation")
+            a, b = payload.get("operands", [0, 0])
+            result = self._compute(op, a, b)
+            return {
+                "status": "success",
+                "agent": "Continuum",
+                "task": intent,
+                "operation": op,
+                "operands": [a, b],
+                "result": result
+            }
         return {
-            "status": "success",
+            "status": "acknowledged",
             "agent": "Continuum",
-            "responds_to": message.get("intent"),
-            "note": "Continuum capsule received and acknowledged."
+            "note": f"Unhandled intent: {intent}"
         }
+
+    def _compute(self, op, a, b):
+        if op == "add": return a + b
+        if op == "multiply": return a * b
+        if op == "subtract": return a - b
+        if op == "divide": return a / b if b != 0 else "error: divide by zero"
+        return "error: unknown operation"
